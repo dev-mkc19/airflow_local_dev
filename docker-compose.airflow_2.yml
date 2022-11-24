@@ -1,0 +1,77 @@
+
+---
+version: '3'
+
+x-airflow-common:
+  &airflow-common
+  image: airflow_local_dev_2
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN:  postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__SQL_ALCHEMY_POOL_RECYCLE: 3600
+    DBT_PROFILES_DIR: /opt/airflow/dbt
+    DBT_USER: admin_user
+    DBT_PASSWORD: Bo62pRue8/?Y/T}?2Rm2
+    AIRFLOW_HOME_BI: /opt/airflow/
+  volumes:
+    - ${AIRFLOW_2_CONTENT_FOLDER}/sheduler/airflow2/dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ${AIRFLOW_2_CONTENT_FOLDER}/dbt:/opt/airflow/dbt
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash -c "/bin/bash -c \"$${@}\""
+    command: |
+      /bin/bash -c "
+        airflow db init
+        airflow db upgrade
+        airflow users create -r Admin -u admin -e airflow@airflow.com -f admin -l user -p admin
+      "
+    environment:
+      <<: *airflow-common-env
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    # volumes:
+    #   - ./metadata_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    environment:
+      <<: *airflow-common-env
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - 8081:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    environment:
+      <<: *airflow-common-env
+
+# Names our volume
+volumes:
+  my-db:
