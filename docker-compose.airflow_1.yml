@@ -36,7 +36,7 @@ services:
             - ${AIRFLOW_1_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
             - ${AIRFLOW_1_CONTENT_FOLDER}/sql_scripts:/opt/airflow/sql_scripts
             - ./airflow_1/requirements.txt:/opt/airflow/requirements.txt
-            - ~/.config/gcloud/application_default_credentials.json:/opt/airflow/.config/gcloud/application_default_credentials.json
+            - /Users/mikhail/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
         ports:
             - "8081:8080"
         command: webserver
