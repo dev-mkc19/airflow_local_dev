@@ -14,11 +14,14 @@ x-airflow-common:
     DBT_PROFILES_DIR: /opt/airflow/dbt
     DBT_USER: admin_user
     DBT_PASSWORD: Bo62pRue8/?Y/T}?2Rm2
-    AIRFLOW_HOME_BI: /opt/airflow/
+    AIRFLOW_HOME_BI: /opt/airflow
+    GOOGLE_CLOUD_PROJECT: indriver-bi
   volumes:
     - ${AIRFLOW_2_CONTENT_FOLDER}/sheduler/airflow2/dags:/opt/airflow/dags
+    - ${AIRFLOW_2_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
     - ./logs:/opt/airflow/logs
     - ${AIRFLOW_2_CONTENT_FOLDER}/dbt:/opt/airflow/dbt
+    - /Users/mikhail/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     postgres:
