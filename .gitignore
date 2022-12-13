@@ -1,6 +1,7 @@
 *.py[co]
 __pycache__
 secrets.md
+*.log
 
 # Vim
 *.swp
