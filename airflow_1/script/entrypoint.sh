@@ -23,10 +23,6 @@ export \
   AIRFLOW__CORE__FERNET_KEY \
   AIRFLOW__CORE__LOAD_EXAMPLES \
 
-# Install custom python package if requirements.txt is present
-if [ -e "requirements.txt" ]; then
-    pip install --user -r requirements.txt
-fi
 
 # Add python path for custom libs
 # export PYTHONPATH="/usr/local/airflow/python_scripts"

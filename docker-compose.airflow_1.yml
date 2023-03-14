@@ -35,7 +35,6 @@ services:
             - ${AIRFLOW_1_CONTENT_FOLDER}/dags:/opt/airflow/dags
             - ${AIRFLOW_1_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
             - ${AIRFLOW_1_CONTENT_FOLDER}/sql_scripts:/opt/airflow/sql_scripts
-            - ./airflow_1/requirements.txt:/opt/airflow/requirements.txt
             - /Users/mikhail/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
         ports:
             - "8081:8080"
