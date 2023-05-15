@@ -9,15 +9,15 @@ This repo has aim to quickly and easily start Airflow 1/2 in container for local
 
 1. Make sure [Docker desktop](https://www.docker.com) has already installed on you Mac.
 2. Then type `make start version=<VERSION>` and see the magic!
-3. Go to url http://localhost:8081 and see WebUI. Done.
+3. Go to url `http://localhost:8081` and see WebUI. Done.
 
 ~~Shit~~ Fails happens and magic might not came, be ready for that :)
 
 ## USAGE
 
 For easier start there is make file with general command. Those commands are aliases of subcommands.
-To start airflow just type command and version of airflow which you want. 
- 
+To start airflow just type command and version of airflow which you want.
+
 Example: `make start version=1`
 
 > Note: You can disable showing Docker Desktop in settings: \
