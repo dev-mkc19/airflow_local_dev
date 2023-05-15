@@ -21,7 +21,7 @@ x-airflow-common:
     - ${AIRFLOW_2_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
     - ./logs:/opt/airflow/logs
     - ${AIRFLOW_2_CONTENT_FOLDER}/dbt:/opt/airflow/dbt
-    - /Users/mikhail/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
+    - /Users/${USER}/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     postgres:
