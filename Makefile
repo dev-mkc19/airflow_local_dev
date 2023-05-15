@@ -3,10 +3,10 @@ version =
 version = $(version)
 
 prepare:
-	pgrep -f "Docker Desktop" > /dev/null || open -a "Docker"
+	pgrep -f "Docker Desktop" > /dev/null || open -g -a "Docker"
 	@( \
 		while ! docker stats --no-stream > /dev/null 2>&1; do\
-		stdbuf -oL echo "Waiting for Docker to launch...";\
+		echo "Waiting for Docker to launch...";\
 		sleep 1;\
 		done\
 	)
