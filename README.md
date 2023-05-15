@@ -2,7 +2,7 @@
 
 ## DESCRIPTION
 
-This repo has aim to qiuqly and easily start Airflow 1/2 in container for local developing purposes.
+This repo has aim to quickly and easily start Airflow 1/2 in container for local developing purposes.
 (write DAGs, fix errors, test functionality).
 
 ## QUICK START
@@ -20,13 +20,16 @@ To start airflow just type command and version of airflow which you want.
  
 Example: `make start version=1`
 
+> Note: You can disable showing Docker Desktop in settings: \
+> Docker Dashboard -> Settings -> General -> remove tick on "Open Docker Dashboard at startup"
+
 To stop airflow just type command and version of airflow which you want.
 
 Example: `make stop version=1`
 
-> Note: You can't run 2 versions of airflow simultaniously.
+> Note: You can't run 2 versions of airflow simultaneously.
 
-## CONFIGUTATION
+## CONFIGURATION
 
 1. Make sure Docker engine has at least 5Gb memory of resources
 2. Set path to your google `application_default_credentials.json` in docker-compose files
