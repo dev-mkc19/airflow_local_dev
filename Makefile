@@ -2,10 +2,14 @@
 version = 
 version = $(version)
 
-# Open Docker Application
 prepare:
-	open -a "Docker"
-	sleep 20
+	pgrep -f "Docker Desktop" > /dev/null || open -a "Docker"
+	@( \
+		while ! docker stats --no-stream > /dev/null 2>&1; do\
+		stdbuf -oL echo "Waiting for Docker to launch...";\
+		sleep 1;\
+		done\
+	)
 
 # Build image
 compile: prepare
