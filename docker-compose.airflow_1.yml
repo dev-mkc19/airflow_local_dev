@@ -1,46 +1,73 @@
 
 ---
-version: '3.7'
-services:
-    postgres:
-        image: postgres:9.6
-        environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-        logging:
-            options:
-                max-size: 10m
-                max-file: "3"
-        ports:
-            - "5432:5432"
+version: '3'
 
-    webserver:
-        image: airflow_local_dev_1
-        restart: always
-        depends_on:
-            - postgres
-        environment:
-            - AIRFLOW_HOME_BI=/opt/airflow/
-            - LOAD_EX=n
-            - EXECUTOR=Local
-            - PYTHONPATH=/opt/airflow/python_scripts
-            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-        logging:
-            options:
-                max-size: 10m
-                max-file: "3"
-        volumes:
-            - ${AIRFLOW_1_CONTENT_FOLDER}/dags:/opt/airflow/dags
-            - ${AIRFLOW_1_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
-            - ${AIRFLOW_1_CONTENT_FOLDER}/sql_scripts:/opt/airflow/sql_scripts
-            - /Users/${USER}/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
-        ports:
-            - "8081:8080"
-        command: webserver
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+x-airflow-common:
+  &airflow-common
+  image: airflow_local_dev_1
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN:  postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__SQL_ALCHEMY_POOL_RECYCLE: 3600
+    AIRFLOW_HOME_BI: /opt/airflow
+    PYTHONPATH: /opt/airflow/python_scripts
+    # GOOGLE_CLOUD_PROJECT: indriver-bi
+  volumes:
+    - ${AIRFLOW_1_CONTENT_FOLDER}/dags:/opt/airflow/dags
+    - ${AIRFLOW_1_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
+    - ./logs:/opt/airflow/logs
+    - /Users/${USER}/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash -c "/bin/bash -c \"$${@}\""
+    command: |
+      /bin/bash -c "
+        airflow db init
+        airflow db upgrade
+        airflow users create -r Admin -u admin -e airflow@airflow.com -f admin -l user -p admin
+      "
+    environment:
+      <<: *airflow-common-env
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    # volumes:
+    #   - ./metadata_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    environment:
+      <<: *airflow-common-env
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - 8081:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    environment:
+      <<: *airflow-common-env
