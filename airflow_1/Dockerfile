@@ -1,9 +1,9 @@
-FROM apache/airflow:1.10.15-python3.8
+FROM apache/airflow:2.3.4-python3.8
 ARG AIRFLOW_USER_HOME=/opt/airflow
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
-COPY presto-jdbc-344.jar ${AIRFLOW_USER_HOME}/jdbc_drivers
+COPY trino-jdbc-409.jar ${AIRFLOW_USER_HOME}/jdbc_drivers
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
