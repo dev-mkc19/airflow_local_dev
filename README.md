@@ -38,11 +38,11 @@ Example: `make stop version=1`
 
     ```bash
     airflow connections --add \
-        --conn_id '<CONNECTION_ID>' \
-        --conn_type '<CONNECTION_TYPE>' \
-        --conn_login '<LOGIN>' \
-        --conn_password '<PASSWORD>' \
-        --conn_schema '<SCHEMA>' \
-        --conn_port '<PORT>' \
-        --conn_host '<HOST>'
+        <CONNECTION_ID> \
+        --conn-type '<CONNECTION_TYPE>' \
+        --conn-login '<LOGIN>' \
+        --conn-password '<PASSWORD>' \
+        --conn-schema '<SCHEMA>' \
+        --conn-port '<PORT>' \
+        --conn-host '<HOST>'
     ```
