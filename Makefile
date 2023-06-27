@@ -21,7 +21,9 @@ start: compile
 
 # Stop containers and close the app
 stop:
-	docker compose -f "docker-compose.airflow_$(version).yml" down
+	docker compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) down
+
+quit:
 	osascript -e 'quit app "Docker Desktop"'
 
 # Remove all compiled staff
