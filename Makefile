@@ -17,7 +17,7 @@ compile: prepare
 
 # Start containers from build image
 start: compile
-	docker compose -f "docker-compose.airflow_$(version).yml" up -d 
+	docker compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) up -d 
 
 # Stop containers and close the app
 stop:
