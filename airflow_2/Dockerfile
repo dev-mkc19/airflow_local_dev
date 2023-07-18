@@ -4,5 +4,5 @@ RUN echo "Current build platform is $BUILDPLATFORM"
 WORKDIR $AIRFLOW_HOME
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt; \
+RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r requirements.txt; \
     umask 0002; 
