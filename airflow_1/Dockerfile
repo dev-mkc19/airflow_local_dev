@@ -1,6 +1,4 @@
-FROM --platform=$BUILDPLATFORM apache/airflow:2.3.4-python3.8
-ARG BUILDPLATFORM
-RUN echo "Current build platform is $BUILDPLATFORM"
+FROM apache/airflow:2.3.4-python3.8
 WORKDIR $AIRFLOW_HOME
 
 # switch to root user for enabling to install deps for re-compilation py packages

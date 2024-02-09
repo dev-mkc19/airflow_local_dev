@@ -3,28 +3,22 @@ version =
 version = $(version)
 
 prepare:
-	pgrep -f "Docker Desktop" > /dev/null || open -g -a "Docker"
-	@( \
-		while ! docker stats --no-stream > /dev/null 2>&1; do\
-		echo "Waiting for Docker to launch...";\
-		sleep 1;\
-		done\
-	)
+	/opt/homebrew/bin/colima start
 
 # Build image
 compile: prepare
-	docker build -t airflow_local_dev_$(version) ./airflow_$(version)
+	/opt/homebrew/bin/docker build -t airflow_local_dev_$(version) ./airflow_$(version)
 
 # Start containers from build image
 start: compile
-	docker compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) up -d 
+	/opt/homebrew/bin/docker-compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) up -d 
 
 # Stop containers and close the app
 stop:
-	docker compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) down
+	/opt/homebrew/bin/docker-compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) down
 
 quit:
-	osascript -e 'quit app "Docker Desktop"'
+	/opt/homebrew/bin/colima stop
 
 # Remove all compiled staff
 clean:
