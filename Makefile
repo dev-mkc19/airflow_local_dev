@@ -3,7 +3,7 @@ version =
 version = $(version)
 
 prepare:
-	/opt/homebrew/bin/colima start
+	/opt/homebrew/bin/colima start --cpu 4 --memory 8
 
 # Build image
 compile: prepare

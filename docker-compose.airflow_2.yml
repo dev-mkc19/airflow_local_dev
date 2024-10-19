@@ -5,23 +5,20 @@ version: '3'
 x-airflow-common:
   &airflow-common
   image: airflow_local_dev_2
+  env_file:
+    - ./airflow_2/.env_config
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__CORE__SQL_ALCHEMY_CONN:  postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__CORE__SQL_ALCHEMY_POOL_RECYCLE: 3600
-    DBT_PROFILES_DIR: /opt/airflow/dbt
-    DBT_USER: admin_user
-    DBT_PASSWORD: Bo62pRue8/?Y/T}?2Rm2
     AIRFLOW_HOME_BI: /opt/airflow
-    GOOGLE_CLOUD_PROJECT: indriver-bi
+    PYTHONPATH: /opt/airflow
+    REPO_PATH: /opt/airflow
   volumes:
-    - ${AIRFLOW_2_CONTENT_FOLDER}/sheduler/airflow2/dags:/opt/airflow/dags
-    - ${AIRFLOW_2_CONTENT_FOLDER}/python_scripts:/opt/airflow/python_scripts
+    - ${AIRFLOW_2_CONTENT_FOLDER}:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
-    - ${AIRFLOW_2_CONTENT_FOLDER}/dbt:/opt/airflow/dbt
-    - /Users/${USER}/.config/gcloud/application_default_credentials.json:/home/airflow/.config/gcloud/application_default_credentials.json
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     postgres:
