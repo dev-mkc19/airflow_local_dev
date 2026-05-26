@@ -6,6 +6,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   && apt-get install -y vim \
   && apt-get install -y git \
+  && apt-get install -y openjdk-11-jdk ant \
   # trino client has to install backports.zoneinfo which require bin lib below
     build-essential gcc \
   && apt-get autoremove -yqq --purge \

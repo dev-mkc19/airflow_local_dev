@@ -13,12 +13,15 @@ x-airflow-common:
     AIRFLOW__CORE__SQL_ALCHEMY_CONN:  postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__CORE__SQL_ALCHEMY_POOL_RECYCLE: 3600
+    AIRFLOW__CORE__FERNET_KEY: AlUkYljVaJZ3dHucotk_G5Txn_n0PxHz5YJO1Ghn3Io=
     AIRFLOW_HOME_BI: /opt/airflow
     PYTHONPATH: /opt/airflow
     REPO_PATH: /opt/airflow
   volumes:
-    - ${AIRFLOW_2_CONTENT_FOLDER}:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
+    - ${AIRFLOW_2_CONTENT_FOLDER}/dags:/opt/airflow/dags
+    - ${AIRFLOW_2_CONTENT_FOLDER}/dbt:/opt/airflow/dbt
+    - ${AIRFLOW_2_CONTENT_FOLDER}/python_scripts:/opt/airflow/dags/python_scripts
+    - ${AIRFLOW_2_CONTENT_FOLDER}/logs:/opt/airflow/logs
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     postgres:
