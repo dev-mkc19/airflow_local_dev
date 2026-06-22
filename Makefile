@@ -11,11 +11,11 @@ compile: prepare
 
 # Start containers from build image
 start: compile
-	/opt/homebrew/bin/docker-compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) up -d 
+	/opt/homebrew/bin/docker-compose -f "./airflow_$(version)/docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) up -d 
 
 # Stop containers and close the app
 stop:
-	/opt/homebrew/bin/docker-compose -f "docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) down
+	/opt/homebrew/bin/docker-compose -f "./airflow_$(version)/docker-compose.airflow_$(version).yml" -p airflow_local_dev_$(version) down
 
 quit:
 	/opt/homebrew/bin/colima stop
@@ -25,6 +25,7 @@ clean:
 # || true is used for suppress errors if occured
 	docker rmi airflow_local_dev_$(version) || true
 	rm -R ./logs || true
+	rm -R ./airflow_$(version)/logs || true
 	rm -R ./metadata_db || true
 	find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
 	find . | grep -E "(/logs$)" | xargs rm -rf

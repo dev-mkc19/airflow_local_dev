@@ -1,12 +1,9 @@
-
 ---
-version: '3'
-
 x-airflow-common:
   &airflow-common
   image: airflow_local_dev_2
   env_file:
-    - ./airflow_2/.env_config
+    - .env
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
