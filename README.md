@@ -10,7 +10,7 @@
 |--------|---------|---------------|---------------------|--------------------|
 | 1      | 2.3.4   | LocalExecutor | http://localhost:8081 | admin / admin  |
 | 2      | 2.5.3   | LocalExecutor | http://localhost:8082 | admin / admin  |
-| 3      | 3.2.2   | CeleryExecutor| http://localhost:8083 | airflow / airflow |
+| 3      | 3.2.2   | CeleryExecutor| http://localhost:8083 | admin / admin  |
 
 ## Быстрый старт
 
